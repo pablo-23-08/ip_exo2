@@ -2,51 +2,13 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-
-void get_ip(char ip[15], char bit_reseau[3]);
-void fonct_msr(char ip[15], char br[3], char msr[15], char ip_bin[32], char msr_bin[32]);
-void fonct_reseau(char reseau[15], char reseau_bin[32], char ip_bin[32], char msr_bin[32]);
-void fonct_broadcast(char broadcast[15], char broadcast_bin[32], char ip_bin[32], char msr_bin[32], char br[3]);
-void fonct_nbre_machine(int *nbre_machine, char msr_bin[32]);
-
-
-void binary(int *nbre, char bin[8]);
-void decimal(char bin[8],int *nbre);
-void form_bin(char ip[15], char ip_bin[32]);
-void form_dec(char ip[15], char ip_bin[32]);
-
-int main ()
-{
-	char bit_reseau[3];
-	char ip[15];
-	char ip_bin[32];
-	char msr[15];
-	char msr_bin[32];
-	char reseau[15];
-	char reseau_bin[32];
-	char broadcast[15];
-	char broadcast_bin[32];
-	int nbre_machine;
-	get_ip(ip, bit_reseau);
-	fonct_msr(ip, bit_reseau, msr, ip_bin, msr_bin);
-	fonct_reseau(reseau, reseau_bin, ip_bin, msr_bin);
-	fonct_broadcast(broadcast, broadcast_bin, ip_bin, msr_bin, bit_reseau);
-	fonct_nbre_machine(&nbre_machine, msr_bin);
-	
-	return 0;
-}
+#include "ip_infos.h"
 
 void get_ip(char ip[15], char bit_reseau[3])
 {
 	char *chaine;
 	chaine = getenv("QUERY_STRING");
 	sscanf(chaine, "ip=%15[^%%]%%2F%3[^\n]", ip, bit_reseau);
-	printf("Content-Type: text/html\n\n");
-	printf("<HTML>\n");
-	printf("<HEAD><TITLE>ip_infos</TITLE><META CHARSET='utf-8'></HEAD>\n");
-	printf("<BODY BGCOLOR='#DDFFFF'>\n");
-	printf("IP=%s et bit_reseau=%s <BR>", ip, bit_reseau);
-	
 }
 
 void fonct_msr(char ip[15], char br[3], char msr[15], char ip_bin[32], char msr_bin[32])
@@ -63,7 +25,6 @@ void fonct_msr(char ip[15], char br[3], char msr[15], char ip_bin[32], char msr_
 			msr_bin[i]='0';
 	}
 	form_dec(msr, msr_bin);
-	printf("msr=%s<BR>\n",msr);
 }
 
 void fonct_reseau(char reseau[15], char reseau_bin[32], char ip_bin[32], char msr_bin[32])
@@ -80,14 +41,12 @@ void fonct_reseau(char reseau[15], char reseau_bin[32], char ip_bin[32], char ms
 		}
 	}
 	form_dec(reseau, reseau_bin);
-	printf("@reseau=%s<BR>\n",reseau);
 }
 
 void fonct_broadcast(char broadcast[15], char broadcast_bin[32], char ip_bin[32], char msr_bin[32], char br[3])
 {
-	int bit_hote, bit_reseau;
+	int bit_reseau;
 	sscanf(br, "%d", &bit_reseau);
-	bit_hote=32-bit_reseau;
 	for(int i=0;i<bit_reseau;i++)
 	{
 		broadcast_bin[i]=ip_bin[i];
@@ -97,7 +56,6 @@ void fonct_broadcast(char broadcast[15], char broadcast_bin[32], char ip_bin[32]
 		broadcast_bin[i]='1';
 	}
 	form_dec(broadcast, broadcast_bin);
-	printf("@broadcast=%s<BR>\n",broadcast);
 }
 
 void fonct_nbre_machine(int *nbre_machine, char msr_bin[32])
@@ -109,12 +67,6 @@ void fonct_nbre_machine(int *nbre_machine, char msr_bin[32])
 			bit_hote++;
 	}
 	*nbre_machine=pow(2,bit_hote)-2;
-	printf("Nombre de machine = %d\n", *nbre_machine);
-	printf("<FORM ACTION='acceuil.cgi' METHOD='GET'>\n");
-	printf("<INPUT TYPE='SUBMIT' VALUE='voir une autre adresse ip'/>\n");
-	printf("</FORM>\n");
-	printf("</BODY>\n");
-	printf("</HTML>\n");
 }
 
 void binary(int *nbre, char bin[8])
@@ -160,7 +112,6 @@ void form_bin(char ip[15], char ip_bin[32])
 			ip_bin[i]=d_[i-24];
 	}
 }
-
 
 void decimal(char bin[8],int *nbre)
 {
