@@ -39,8 +39,8 @@ void display(char ip[15], char msr[15], char reseau[15], char broadcast[15], int
 	if(a<0 || a>255 || b<0 || b>255 || c<0 || c>255 || d<0 || d>255 || e!='\0')
 	{
 		printf("<H1>L'adresse ip que vous avez entrez est fausse! \n</H1><BR>\n");
-        printf("<FORM ACTION=\"acceuil.cgi\" METHOD=\"GET\">\n");
-        printf("<INPUT TYPE=\"SUBMIT\" VALUE=\"Recommencez\"/>\n");
+        	printf("<FORM ACTION=\"acceuil.cgi\" METHOD=\"GET\">\n");
+        	printf("<INPUT TYPE=\"SUBMIT\" VALUE=\"Recommencez\"/>\n");
 	}
 	else
 	{
